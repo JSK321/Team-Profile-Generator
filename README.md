@@ -3,6 +3,8 @@
 
 [Installation](#installation)
 
+[Video](#video)
+
 [Usage](#usage) 
 
 [License](#license) 
@@ -18,6 +20,10 @@ This is a command-line interface program that allows users to create a professio
 ## Installation
 
 After downloading the code, type "npm install" into your terminal in order to download all dependencies for this program.
+
+## Video
+
+[![Team Profile Generator](http://img.youtube.com/vi/RlUcm-1rJV8/0.jpg)](http://www.youtube.com/watch?v=RlUcm-1rJV8 "Team Profile Generator")
 
 ## Usage
 
