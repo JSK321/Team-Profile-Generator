@@ -14,7 +14,7 @@ const render = require("./lib/htmlRenderer");
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-inquirer.prompt([
+const newEmployee = function() { inquirer.prompt([
     {
         type: "input",
         message: "What is your name?",
@@ -47,6 +47,24 @@ inquirer.prompt([
             }
         ]).then(function(response2){
             const manager = new Manager(response.name, response.id, response.email, response2.officeNumber);
+            inquirer.prompt([
+                {
+                    type: "list",
+                    message: "Do you want to add another employee?",
+                    choices: ["Yes", "No"],
+                    name: "another"
+                }
+            ]).then(function(response3){
+                if (response3.another === "Yes")
+                {
+                    //send back to first question
+                    newEmployee();
+                }
+                else
+                {
+                    //send to renderHTML function and write the HTML file?
+                }
+            })
         })
     }
     if (response.employee === "Intern")
@@ -59,6 +77,24 @@ inquirer.prompt([
             }
         ]).then(function(response2){
             const intern = new Intern(response.name, response.id, response.email, response2.school);
+            inquirer.prompt([
+                {
+                    type: "list",
+                    message: "Do you want to add another employee?",
+                    choices: ["Yes", "No"],
+                    name: "another"
+                }
+            ]).then(function(response3){
+                if (response3.another === "Yes")
+                {
+                    //send back to first question
+                    newEmployee();
+                }
+                else
+                {
+                    //send to renderHTML function and write the HTML file?
+                }
+            })
         })
     }
     if (response.employee === "Engineer")
@@ -71,9 +107,30 @@ inquirer.prompt([
             }
         ]).then(function(response2){
             const engineer = new Engineer(response.name, response.id, response.email, response2.github);
+            inquirer.prompt([
+                {
+                    type: "list",
+                    message: "Do you want to add another employee?",
+                    choices: ["Yes", "No"],
+                    name: "another"
+                }.then(function(response3){
+                    if (response3.another === "Yes")
+                {
+                    //send back to first question
+                    newEmployee();
+                }
+                else
+                {
+                    //send to renderHTML function and write the HTML file?
+                }
+                })
+            ])
         })
     }
 })
+}
+
+newEmployee();
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
