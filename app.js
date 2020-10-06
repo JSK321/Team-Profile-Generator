@@ -9,11 +9,9 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+let employees = [];
 
-
-
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
+//Set the initial prompts equal to a function so I could use recursion should the user wish to add a new employee
 const newEmployee = function() { inquirer.prompt([
     {
         type: "input",
@@ -46,7 +44,10 @@ const newEmployee = function() { inquirer.prompt([
                 name: "officeNumber"
             }
         ]).then(function(response2){
+            //Makes a new manager object with the previous answers
             const manager = new Manager(response.name, response.id, response.email, response2.officeNumber);
+            //Adds the manager object to the employees array
+            employees.push(manager);
             inquirer.prompt([
                 {
                     type: "list",
@@ -57,12 +58,17 @@ const newEmployee = function() { inquirer.prompt([
             ]).then(function(response3){
                 if (response3.another === "Yes")
                 {
-                    //send back to first question
+                    //Send back to first question.
                     newEmployee();
                 }
                 else
                 {
-                    //send to renderHTML function and write the HTML file?
+                    //Writes the end-result index.html file with the full set of employees.
+                    fs.writeFile("index.html", render(employees), function(err){
+                        if (err) {
+                                return console.log(err);
+                                  }
+                    });
                 }
             })
         })
@@ -77,6 +83,7 @@ const newEmployee = function() { inquirer.prompt([
             }
         ]).then(function(response2){
             const intern = new Intern(response.name, response.id, response.email, response2.school);
+            employees.push(intern);
             inquirer.prompt([
                 {
                     type: "list",
@@ -87,12 +94,15 @@ const newEmployee = function() { inquirer.prompt([
             ]).then(function(response3){
                 if (response3.another === "Yes")
                 {
-                    //send back to first question
                     newEmployee();
                 }
                 else
                 {
-                    //send to renderHTML function and write the HTML file?
+                    fs.writeFile("index.html", render(employees), function(err){
+                            if (err) {
+                            return console.log(err);
+                            }
+                    });
                 }
             })
         })
@@ -107,47 +117,31 @@ const newEmployee = function() { inquirer.prompt([
             }
         ]).then(function(response2){
             const engineer = new Engineer(response.name, response.id, response.email, response2.github);
+            employees.push(engineer);
             inquirer.prompt([
                 {
                     type: "list",
                     message: "Do you want to add another employee?",
                     choices: ["Yes", "No"],
                     name: "another"
-                }.then(function(response3){
+                }
+            ]).then(function(response3){
                     if (response3.another === "Yes")
                 {
-                    //send back to first question
                     newEmployee();
                 }
                 else
                 {
-                    //send to renderHTML function and write the HTML file?
+                    fs.writeFile("index.html", render(employees), function(err){
+                        if (err) {
+                                return console.log(err);
+                                }
+                    });
                 }
-                })
-            ])
+            })
         })
     }
 })
 }
 
 newEmployee();
-
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
